@@ -1,0 +1,42 @@
+esphome:
+  name: prusa_light
+  platform: ESP8266
+  board: esp01_1m
+  arduino_version: 2.4.2
+
+wifi:
+  ssid: "frischfunk-iot"
+  password: !secret wifi_psk
+
+logger:
+
+api:
+  password: !secret device
+
+ota:
+  password: !secret device
+
+web_server:
+  port: 80
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button"
+    on_press:
+      - switch.toggle: relay
+
+switch:
+  - platform: gpio
+    name: "Relay"
+    pin: GPIO12
+    id: relay
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
