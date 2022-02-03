@@ -1,5 +1,5 @@
 esphome:
-  name: office_light
+  name: office-light
   platform: ESP8266
   board: esp8285
 
