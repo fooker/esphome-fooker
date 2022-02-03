@@ -1,0 +1,49 @@
+esphome:
+  name: office_light
+  platform: ESP8266
+  board: esp8285
+
+wifi:
+  ssid: "frischfunk-iot"
+  password: !secret wifi_psk
+
+logger:
+
+api:
+  password: !secret device
+
+ota:
+  password: !secret device
+
+web_server:
+  port: 80
+
+output:
+  - platform: esp8266_pwm
+    id: output_red
+    pin: GPIO4
+  - platform: esp8266_pwm
+    id: output_green
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: output_blue
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: output_brightness
+    pin: GPIO5
+  - platform: esp8266_pwm
+    id: output_colortemp
+    pin: GPIO13
+    
+light:
+  - platform: rgbct
+    name: "Office Light"
+    red: output_red
+    green: output_green
+    blue: output_blue
+    color_temperature: output_colortemp
+    white_brightness: output_brightness
+    cold_white_color_temperature: 6000 K
+    warm_white_color_temperature: 3000 K
+    color_interlock: true
+
