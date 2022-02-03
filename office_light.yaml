@@ -34,6 +34,7 @@ output:
   - platform: esp8266_pwm
     id: output_colortemp
     pin: GPIO13
+    inverted: true
     
 light:
   - platform: rgbct
