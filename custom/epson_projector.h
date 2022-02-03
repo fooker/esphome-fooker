@@ -13,7 +13,7 @@ public:
 
 	void loop() override {
 		if (this->available()) {
-			String line = this->readStringUntil(':');
+			String line = this->readLine();
 			line.trim();
 
 			ESP_LOGD("epson", "Got line '%s'", line.c_str());
@@ -53,6 +53,17 @@ protected:
 	}
 
 private:
+	String readLine() {
+		String ret;
+
+		int c = read();
+    		while(c >= 0 && c != ':') {
+			ret += (char) c;
+			c = read();
+		}
+		return ret;
+	}
+
 	void on_power(const bool power) {
 		ESP_LOGD("epson", "Switching to %d having %d targeting %d", power, this->state, this->target);
 
