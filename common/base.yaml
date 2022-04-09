@@ -1,0 +1,21 @@
+esphome:
+  name: ${name}
+  build_path: ./build/${name}
+
+logger:
+
+api:
+  password: !secret device
+  reboot_timeout: 1h
+
+sensor:
+  - platform: uptime
+    name: Uptime
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+
+binary_sensor:
+  - platform: status
+    name: "Status"
+
