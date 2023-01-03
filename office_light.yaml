@@ -30,8 +30,8 @@ light:
     blue: output_blue
     color_temperature: output_colortemp
     white_brightness: output_brightness
-    cold_white_color_temperature: 6000 K
-    warm_white_color_temperature: 3000 K
+    cold_white_color_temperature: 153 mireds
+    warm_white_color_temperature: 500 mireds
     color_interlock: true
     restore_mode: ALWAYS_ON
 
