@@ -1,0 +1,39 @@
+substitutions:
+  name: art-light
+
+packages:
+  esp8285: !include common/esp8285.yaml
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: True
+    internal: true
+    name: "Button"
+    on_press:
+      - light.toggle: primary
+
+status_led:
+  pin:
+    number: GPIO02
+    inverted: yes
+
+output:
+  - platform: gpio
+    pin: GPIO00
+    inverted: true
+    id: indicator
+
+  - platform: gpio
+    pin: GPIO15
+    id: relay
+
+light:
+  - platform: binary
+    output: relay
+    name: "Art Light"
+    id: primary
+    restore_mode: RESTORE_DEFAULT_OFF
+
