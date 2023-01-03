@@ -10,10 +10,12 @@ api:
 
 sensor:
   - platform: uptime
-    name: Uptime
-  - platform: wifi_signal
-    name: "WiFi Signal"
+    name: "Uptime"
     update_interval: 60s
+
+text_sensor:
+  - platform: version
+    name: "ESPHome Version"
 
 binary_sensor:
   - platform: status
