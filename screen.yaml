@@ -1,0 +1,50 @@
+substitutions:
+  name: screen
+
+packages:
+  esp8285: !include common/esp8285.yaml
+
+switch:
+  - platform: gpio
+    id: open_cover_switch
+    pin: 12
+    name: "Open Projector Screen"
+    interlock: [ close_cover_switch ]
+    interlock_wait_time: 5s
+    internal: true
+  
+  - platform: gpio
+    id: close_cover_switch
+    pin: 5
+    name: "Close Projector Screen"
+    interlock: [ open_cover_switch ]
+    interlock_wait_time: 5s
+    internal: true
+
+  - platform: template
+    name: "Projector Screen"
+
+    turn_on_action:
+      - switch.turn_off: close_cover_switch
+      - switch.turn_on: open_cover_switch
+      - delay: 60s
+      - switch.turn_off: open_cover_switch
+
+    turn_off_action:
+      - switch.turn_off: open_cover_switch
+      - switch.turn_on: close_cover_switch
+      - delay: 60s
+      - switch.turn_off: close_cover_switch
+
+    optimistic: True
+    assumed_state: True
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO10
+      mode:
+        input: true
+        pullup: true
+    name: "Projector Screen Button"
+
