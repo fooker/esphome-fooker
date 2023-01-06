@@ -23,18 +23,19 @@ switch:
 
   - platform: template
     name: "Projector Screen"
+    icon: "mdi:projector-screen-variant"
 
     turn_on_action:
-      - switch.turn_off: close_cover_switch
-      - switch.turn_on: open_cover_switch
-      - delay: 60s
-      - switch.turn_off: open_cover_switch
-
-    turn_off_action:
       - switch.turn_off: open_cover_switch
       - switch.turn_on: close_cover_switch
       - delay: 60s
       - switch.turn_off: close_cover_switch
+
+    turn_off_action:
+      - switch.turn_off: close_cover_switch
+      - switch.turn_on: open_cover_switch
+      - delay: 60s
+      - switch.turn_off: open_cover_switch
 
     optimistic: True
     assumed_state: True
