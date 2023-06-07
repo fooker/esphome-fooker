@@ -1,0 +1,29 @@
+substitutions:
+  name: office-led-dots
+
+packages:
+  esp8285: !include common/esp8285.yaml
+
+wled:
+
+light:
+  - name: "Office LED Dots"
+    platform: neopixelbus
+    type: GRB
+    variant: WS2812
+    pin: GPIO2
+    num_leds: 50
+    method:
+      type: esp8266_uart
+      bus: 1
+      async: true
+    effects:
+      - wled:
+          port: 21324
+      - addressable_rainbow:
+      - addressable_color_wipe:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+      - addressable_fireworks:
+      - addressable_flicker:
+
