@@ -6,5 +6,6 @@
 **/platformio.ini
 
 /.envrc
+/.direnv
 
 /build
