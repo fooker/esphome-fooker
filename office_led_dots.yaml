@@ -9,7 +9,7 @@ wled:
 light:
   - name: "Office LED Dots"
     platform: neopixelbus
-    type: GRB
+    type: RGB
     variant: WS2812
     pin: GPIO2
     num_leds: 50
