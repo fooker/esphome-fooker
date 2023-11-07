@@ -1,7 +1,6 @@
 wifi:
   ssid: "frischfunk-iot"
   password: !secret wifi_psk
-  fast_connect: true
 
 ota:
   password: !secret device

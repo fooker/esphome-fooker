@@ -2,7 +2,12 @@ substitutions:
   name: prusa-light
 
 packages:
-  esp8285: !include common/esp8285.yaml
+  base: !include common/base.yaml
+  wifi: !include common/wifi.yaml
+
+esp8266:
+  board: esp01_1m
+  restore_from_flash: true
 
 binary_sensor:
   - platform: gpio
@@ -12,22 +17,22 @@ binary_sensor:
       inverted: True
     name: "Button"
     on_press:
-      - light.toggle: main
+      - light.toggle: light_main
 
 output:
-  - id: light_output
+  - id: output_light
     platform: gpio
     pin: GPIO12
 
 light:
   - platform: binary
-    output: light_output
+    output: output_light
     name: "Prusa Light"
-    id: main
+    id: light_main
     restore_mode: RESTORE_DEFAULT_OFF
 
 status_led:
   pin:
     number: GPIO13
-    inverted: yes
+    inverted: True
 
