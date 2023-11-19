@@ -8,6 +8,11 @@ api:
   password: !secret device
   reboot_timeout: 1h
 
+external_components:
+  - source:
+      type: local
+      path: components
+
 sensor:
   - platform: uptime
     name: "Uptime"

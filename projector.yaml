@@ -4,22 +4,15 @@ substitutions:
 packages:
   esp8285: !include common/esp8285.yaml
 
-esphome:
-  includes:
-    - "custom/epson_projector.h"
+logger:
+  baud_rate: 0
 
 uart:
-  id: bus
-  tx_pin: 1
-  rx_pin: 3
+  tx_pin: GPIO1
+  rx_pin: GPIO3
   baud_rate: 9600
 
 switch:
-  - platform: custom
-    lambda: |-
-      auto comp = new EpsonProjectorComponent(id(bus));
-      App.register_component(comp);
-      return { comp };
-    
-    switches:
-      name: "Projector"
+  - platform: epson_projector
+    name: "Projector"
+
