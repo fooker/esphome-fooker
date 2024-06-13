@@ -1,0 +1,179 @@
+substitutions:
+  name: co2-sensor-office
+
+packages:
+  esp8285: !include common/d1_mini.yaml
+
+globals:
+  # Configure CO2 indicator thresholds
+  - id: threshold1
+    type: float
+    initial_value: '750'
+  - id: threshold2
+    type: float
+    initial_value: '1200'
+  - id: threshold3
+    type: float
+    initial_value: '1500'
+  - id: threshold4
+    type: float
+    initial_value: '1750'
+  - id: threshold5
+    type: float
+    initial_value: '2000'
+
+  # Configure the brightness values for the LED indicator
+  - id: dim
+    type: float
+    initial_value: '0.5'
+  - id: bright
+    type: float
+    initial_value: '1.0'
+
+esphome:
+  on_boot:
+    then:
+      - light.turn_on:
+          id: indicator
+          red: 0
+          green: 0.2
+          blue: 1.0
+          effect: "None"
+          brightness: 30%
+
+i2c:
+  scl: GPIO5
+  sda: GPIO4
+  scan: false
+
+sensor:
+  - platform: scd4x
+    id: scd40
+
+    measurement_mode: low_power_periodic
+    update_interval: 30s
+
+    co2:
+      name: "Office CO2"
+      on_value:
+        then:
+        - if:
+            condition:
+              and:
+                - lambda: return (x < id(threshold1));
+                - light.is_on: indicator
+            then:
+              - light.turn_on:
+                  # cold white
+                  id: indicator
+                  red: 0.9
+                  green: 0.9
+                  blue: 0.9
+                  effect: "None"
+                  brightness: !lambda |-
+                    return id(dim);
+        - if:
+            condition:
+              and:
+                - lambda: return (x > id(threshold1) and x < id(threshold2));
+                - light.is_on: indicator
+            then:
+              - light.turn_on:
+                  # neutral white
+                  id: indicator
+                  red: 1.0
+                  green: 0.84
+                  blue: 0.54
+                  effect: "None"
+                  brightness: !lambda |-
+                    return id(bright);
+        - if:
+            condition:
+              and:
+                - lambda: return (x > id(threshold2) and x < id(threshold3));
+                - light.is_on: indicator
+            then:
+
+              - light.turn_on:
+                  # warmwhite
+                  id: indicator
+                  red: 1.0
+                  green: 0.75
+                  blue: 0.0
+                  effect: "None"
+                  brightness: !lambda |-
+                    return id(bright);
+        - if:
+            condition:
+              and:
+                - lambda: return (x > id(threshold3) and x < id(threshold4));
+                - light.is_on: indicator
+            then:
+              - light.turn_on:
+                  # orange
+                  id: indicator
+                  red: 1.0
+                  green: 0.5
+                  blue: 0.0
+                  effect: "None"
+                  brightness: !lambda |-
+                    return id(bright);
+        - if:
+            condition:
+              and:
+                - lambda: return (x > id(threshold4) and x < id(threshold5));
+                - light.is_on: indicator
+            then:
+              - light.turn_on:
+                  # red
+                  id: indicator
+                  red: 1.0
+                  green: 0.0
+                  blue: 0.0
+                  effect: "None"
+                  brightness: !lambda |-
+                    return id(bright);
+        - if:
+            condition:
+                - lambda: return (x > id(threshold5));
+                - light.is_on: indicator
+            then:
+              - light.turn_on:
+                  # red pulse
+                  id: indicator
+                  red: 1.0
+                  green: 0.0
+                  blue: 0.0
+                  effect: "Fast Pulse"
+                  brightness: !lambda |-
+                    return id(bright);
+    humidity:
+      name: "Office Humidity"
+    temperature:
+      name: "Office Temperature"
+
+button:
+  - platform: template
+    name: "Office CO2 - Force Sensor Calibration"
+    icon: "mdi:restart"
+    on_press:
+      then:
+        - scd4x.perform_forced_calibration:
+            # https://www.co2.earth/daily-co2
+            value: 427
+            id: scd40
+
+light:
+  - platform: neopixelbus
+    id: indicator
+    name: "Office CO2 Level Indicator"
+    type: GRB
+    variant: WS2812
+    pin: GPIO0
+    num_leds: 3
+    effects:
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 0.5s
+          update_interval: 0.5s
+
