@@ -5,7 +5,8 @@ esphome:
 logger:
 
 api:
-  password: !secret device
+  encryption:
+    key: !secret encryption-key
   reboot_timeout: 1h
 
 external_components:
