@@ -3,7 +3,8 @@ wifi:
   password: !secret wifi_psk
 
 ota:
-  password: !secret device
+  - platform: esphome
+    password: !secret device
 
 web_server:
   port: 80
