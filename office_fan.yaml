@@ -1,0 +1,34 @@
+substitutions:
+  name: office-fan
+
+packages:
+  esp8285: !include common/d1_mini.yaml
+
+logger:
+  baud_rate: 0
+
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+
+tuya:
+  status_pin:
+    number: GPIO15
+    inverted: false
+
+fan:
+  - platform: "tuya"
+    name: "Office Fan"
+    switch_datapoint: 60
+    speed_datapoint: 62
+    direction_datapoint: 63
+    speed_count: 6
+    restore_mode: NO_RESTORE
+
+light:
+  - platform: "tuya"
+    name: "Office Light"
+    color_mode: ON_OFF
+    switch_datapoint: 20
+
